@@ -29,7 +29,11 @@ internal class Program
         set { width = value * 120; }
     }
 
-    static private int AngularVelocity = 10;
+    static public int Radius = 50;
+
+    static private int AngularVelocity = 5;
+
+    static private double Time = 0;
 
     static void Main(string[] args)
     {
@@ -39,7 +43,8 @@ internal class Program
         Width = 6;
 
         Raylib.InitWindow(Width, Width, "Lissajous Curves");
-        Raylib.SetTargetFPS(60);
+        Raylib.SetTargetFPS(24);
+        
 
         while (!Raylib.WindowShouldClose())
         {
@@ -50,6 +55,8 @@ internal class Program
             DrawMovingPoints();
 
             Raylib.EndDrawing();
+
+            Time += 0.01;
         }
 
         Raylib.CloseWindow();
@@ -59,14 +66,23 @@ internal class Program
     {
         for (int i = 0; i < Width / 120; i++)
         {
-            Raylib.DrawCircleLines(i * 120 + 60, 60, 50, Color.WHITE);
-            Raylib.DrawCircleLines(60, i * 120 + 60, 50, Color.WHITE);
+            Raylib.DrawCircleLines(i * 120 + 60, 60, Radius, Color.WHITE);
+            Raylib.DrawCircleLines(60, i * 120 + 60, Radius, Color.WHITE);
         }
     }
 
     static void DrawMovingPoints()
     {
-           
+        for (int i = 0; i < Width; i += 120)
+        {
+            double AngVelCng = Math.Max(i / 120, 0.5);
+
+            Raylib.DrawCircle((int)(i + 60 + Radius * Math.Cos(AngularVelocity * AngVelCng * Time)), 
+                (int)(60 + Radius * Math.Sin(AngularVelocity * AngVelCng * Time)), 5, Color.YELLOW);
+
+            Raylib.DrawCircle((int)(60 + Radius * Math.Cos(AngularVelocity * AngVelCng * Time)),
+                (int)(i + 60 + Radius * Math.Sin(AngularVelocity * AngVelCng * Time)), 5, Color.YELLOW);
+        }
     }
 
 }
