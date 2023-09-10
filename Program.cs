@@ -1,7 +1,5 @@
 ﻿namespace Lissajous_curves;
-
 using Raylib_cs;
-
 
 internal class Program
 {
@@ -33,9 +31,7 @@ internal class Program
 
     static private int AngularVelocity = 5;
 
-    static private double Time = 0;
-
-    static void Main(string[] args)
+    unsafe static void Main(string[] args)
     {
         A = 1;
         B = 1;
@@ -44,15 +40,36 @@ internal class Program
 
         Raylib.InitWindow(Width, Width, "Lissajous Curves");
         Raylib.SetTargetFPS(24);
-        
+
+        Console.Clear();
+
+        double Time = 0;
+        double* TmPtr = &Time;
+
+        ReferenceCircle[] referenceCircles = new ReferenceCircle[]
+        {
+            new ReferenceCircle(Radius, 60, 60, AngularVelocity, TmPtr),
+            new ReferenceCircle(Radius, 180, 60, AngularVelocity, TmPtr),
+            new ReferenceCircle(Radius, 300, 60, AngularVelocity, TmPtr),
+            new ReferenceCircle(Radius, 420, 60, AngularVelocity, TmPtr),
+            new ReferenceCircle(Radius, 540, 60, AngularVelocity, TmPtr),
+            new ReferenceCircle(Radius, 660, 60, AngularVelocity, TmPtr),
+            new ReferenceCircle(Radius, 60, 180, AngularVelocity, TmPtr),
+            new ReferenceCircle(Radius, 60, 300, AngularVelocity, TmPtr),
+            new ReferenceCircle(Radius, 60, 420, AngularVelocity, TmPtr),
+            new ReferenceCircle(Radius, 60, 540, AngularVelocity, TmPtr),
+            new ReferenceCircle(Radius, 60, 660, AngularVelocity, TmPtr),
+
+        };
+
 
         while (!Raylib.WindowShouldClose())
         {
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.BLACK);
 
-            DrawCircles();
-            DrawMovingPoints();
+            foreach (ReferenceCircle referenceCircle in referenceCircles)
+                referenceCircle.Update();
 
             Raylib.EndDrawing();
 
@@ -60,29 +77,6 @@ internal class Program
         }
 
         Raylib.CloseWindow();
-    }
-
-    static void DrawCircles()
-    {
-        for (int i = 0; i < Width / 120; i++)
-        {
-            Raylib.DrawCircleLines(i * 120 + 60, 60, Radius, Color.WHITE);
-            Raylib.DrawCircleLines(60, i * 120 + 60, Radius, Color.WHITE);
-        }
-    }
-
-    static void DrawMovingPoints()
-    {
-        for (int i = 0; i < Width; i += 120)
-        {
-            double AngVelCng = Math.Max(i / 120, 0.5);
-
-            Raylib.DrawCircle((int)(i + 60 + Radius * Math.Cos(AngularVelocity * AngVelCng * Time)), 
-                (int)(60 + Radius * Math.Sin(AngularVelocity * AngVelCng * Time)), 5, Color.YELLOW);
-
-            Raylib.DrawCircle((int)(60 + Radius * Math.Cos(AngularVelocity * AngVelCng * Time)),
-                (int)(i + 60 + Radius * Math.Sin(AngularVelocity * AngVelCng * Time)), 5, Color.YELLOW);
-        }
     }
 
 }
