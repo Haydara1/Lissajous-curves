@@ -21,24 +21,52 @@ internal class Program
         set { b = value; }
     }
 
+    static private int width;
+
+    static public int Width
+    {
+        get { return width; }
+        set { width = value * 120; }
+    }
+
+    static private int AngularVelocity = 10;
 
     static void Main(string[] args)
     {
         A = 1;
         B = 1;
 
-        Raylib.InitWindow(1080, 720, "Lissajous Curves");
+        Width = 6;
+
+        Raylib.InitWindow(Width, Width, "Lissajous Curves");
+        Raylib.SetTargetFPS(60);
 
         while (!Raylib.WindowShouldClose())
         {
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.BLACK);
 
-            
+            DrawCircles();
+            DrawMovingPoints();
 
             Raylib.EndDrawing();
         }
 
         Raylib.CloseWindow();
     }
+
+    static void DrawCircles()
+    {
+        for (int i = 0; i < Width / 120; i++)
+        {
+            Raylib.DrawCircleLines(i * 120 + 60, 60, 50, Color.WHITE);
+            Raylib.DrawCircleLines(60, i * 120 + 60, 50, Color.WHITE);
+        }
+    }
+
+    static void DrawMovingPoints()
+    {
+           
+    }
+
 }
