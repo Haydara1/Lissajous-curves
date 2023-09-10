@@ -3,22 +3,6 @@ using Raylib_cs;
 
 internal class Program
 {
-    static private int a;
-
-    static public int A
-    {
-        get { return a; }
-        set { a = value; }
-    }
-
-    static private int b;
-
-    static public int B
-    {
-        get { return b; }
-        set { b = value; }
-    }
-
     static private int width;
 
     static public int Width
@@ -33,13 +17,12 @@ internal class Program
 
     unsafe static void Main(string[] args)
     {
-        A = 1;
-        B = 1;
+        bool DrawCurves = false;
 
         Width = 6;
 
         Raylib.InitWindow(Width, Width, "Lissajous Curves");
-        Raylib.SetTargetFPS(24);
+        Raylib.SetTargetFPS(28);
 
         Console.Clear();
 
@@ -48,28 +31,80 @@ internal class Program
 
         ReferenceCircle[] referenceCircles = new ReferenceCircle[]
         {
-            new ReferenceCircle(Radius, 60, 60, AngularVelocity, TmPtr),
-            new ReferenceCircle(Radius, 180, 60, AngularVelocity, TmPtr),
-            new ReferenceCircle(Radius, 300, 60, AngularVelocity, TmPtr),
-            new ReferenceCircle(Radius, 420, 60, AngularVelocity, TmPtr),
-            new ReferenceCircle(Radius, 540, 60, AngularVelocity, TmPtr),
-            new ReferenceCircle(Radius, 660, 60, AngularVelocity, TmPtr),
-            new ReferenceCircle(Radius, 60, 180, AngularVelocity, TmPtr),
-            new ReferenceCircle(Radius, 60, 300, AngularVelocity, TmPtr),
-            new ReferenceCircle(Radius, 60, 420, AngularVelocity, TmPtr),
-            new ReferenceCircle(Radius, 60, 540, AngularVelocity, TmPtr),
-            new ReferenceCircle(Radius, 60, 660, AngularVelocity, TmPtr),
-
+            new ReferenceCircle(Radius, 180, 60, AngularVelocity - 1, TmPtr),
+            new ReferenceCircle(Radius, 300, 60, AngularVelocity + 4, TmPtr),
+            new ReferenceCircle(Radius, 420, 60, AngularVelocity - 6, TmPtr),
+            new ReferenceCircle(Radius, 540, 60, AngularVelocity + 1, TmPtr),
+            new ReferenceCircle(Radius, 660, 60, AngularVelocity + 2, TmPtr),
+            new ReferenceCircle(Radius, 60, 180, AngularVelocity + 10, TmPtr),
+            new ReferenceCircle(Radius, 60, 300, AngularVelocity - 5, TmPtr),
+            new ReferenceCircle(Radius, 60, 420, AngularVelocity + 2, TmPtr),
+            new ReferenceCircle(Radius, 60, 540, AngularVelocity + 2, TmPtr),
+            new ReferenceCircle(Radius, 60, 660, AngularVelocity - 1, TmPtr),
         };
+
+        ReferenceCircle[] referenceCirclesNonRemovable = new ReferenceCircle[]
+        {
+            new ReferenceCircle(Radius, 180, 60, AngularVelocity - 1, TmPtr, false),
+            new ReferenceCircle(Radius, 300, 60, AngularVelocity + 4, TmPtr, false),
+            new ReferenceCircle(Radius, 420, 60, AngularVelocity - 6, TmPtr, false),
+            new ReferenceCircle(Radius, 540, 60, AngularVelocity + 10, TmPtr, false),
+            new ReferenceCircle(Radius, 660, 60, AngularVelocity + 2, TmPtr, false),
+            new ReferenceCircle(Radius, 60, 180, AngularVelocity + 1, TmPtr, false),
+            new ReferenceCircle(Radius, 60, 300, AngularVelocity - 5, TmPtr, false),
+            new ReferenceCircle(Radius, 60, 420, AngularVelocity + 2, TmPtr, false),
+            new ReferenceCircle(Radius, 60, 540, AngularVelocity + 2, TmPtr, false),
+            new ReferenceCircle(Radius, 60, 660, AngularVelocity - 1, TmPtr, false),
+        };
+
+        int[] CurvesPointX = new int[5];
+        int[] CurvesPointY = new int[5];
 
 
         while (!Raylib.WindowShouldClose())
         {
             Raylib.BeginDrawing();
-            Raylib.ClearBackground(Color.BLACK);
 
-            foreach (ReferenceCircle referenceCircle in referenceCircles)
-                referenceCircle.Update();
+            if (!DrawCurves)
+            {
+                Raylib.ClearBackground(Color.BLACK);
+
+                for (int i = 0; i < 10; i++)
+                {
+                    (int x, int y) = referenceCircles[i].Update();
+
+                    if (i < 5)
+                        CurvesPointX[i] = x;
+                    else
+                        CurvesPointY[i - 5] = y;
+                }
+
+                for (int i = 0; i < 5; i++)
+                    for (int j = 0; j < 5; j++)
+                        Raylib.DrawCircle(CurvesPointX[i], CurvesPointY[j], 5, Color.YELLOW);
+            }
+            else
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    (int x, int y) = referenceCirclesNonRemovable[i].Update();
+
+                    if (i < 5)
+                        CurvesPointX[i] = x;
+                    else
+                        CurvesPointY[i - 5] = y;
+                }
+
+                for (int i = 0; i < 5; i++)
+                    for (int j = 0; j < 5; j++)
+                        Raylib.DrawCircle(CurvesPointX[i], CurvesPointY[j], 1, Color.WHITE);
+            }
+
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+            {
+                DrawCurves = !DrawCurves;
+                Raylib.ClearBackground(Color.BLACK);
+            }
 
             Raylib.EndDrawing();
 
