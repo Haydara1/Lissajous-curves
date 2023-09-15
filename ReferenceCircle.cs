@@ -16,7 +16,7 @@ unsafe public struct ReferenceCircle
         Radius = radius;
         PosX = posX;
         PosY = posY;
-        AngularVelocity = angularVelocity;
+        AngularVelocity = angularVelocity / 5;
         Time = time;
         Removable = removable;
         Update();
@@ -27,10 +27,12 @@ unsafe public struct ReferenceCircle
         int X = (int)(PosX + Radius * Math.Cos(AngularVelocity * *Time));
         int Y = (int)(PosY + Radius * Math.Sin(AngularVelocity * *Time));
 
-        Raylib.DrawCircleLines(PosX, PosY, Radius, Color.WHITE);
 
-        if(Removable)
-            Raylib.DrawCircle( X, Y, 5, Color.YELLOW);
+        if (Removable)
+        {
+            Raylib.DrawCircleLines(PosX, PosY, Radius, Color.WHITE);
+            Raylib.DrawCircle(X, Y, 5, Color.YELLOW);
+        }
 
         return (X, Y);
     }

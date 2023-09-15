@@ -1,5 +1,6 @@
 ﻿namespace Lissajous_curves;
 using Raylib_cs;
+using System.Diagnostics;
 
 internal class Program
 {
@@ -22,39 +23,55 @@ internal class Program
         Width = 6;
 
         Raylib.InitWindow(Width, Width, "Lissajous Curves");
-        Raylib.SetTargetFPS(28);
+        Raylib.SetTargetFPS(64);
 
         Console.Clear();
 
         double Time = 0;
         double* TmPtr = &Time;
 
+        Random rnd = new Random();
+
+        int[] AngularVelocities = new int[]
+        {
+            rnd.Next(-10, 10),
+            rnd.Next(-10, 10),
+            rnd.Next(-10, 10),
+            rnd.Next(-10, 10),
+            rnd.Next(-10, 10),
+            rnd.Next(-10, 10),
+            rnd.Next(-10, 10),
+            rnd.Next(-10, 10),
+            rnd.Next(-10, 10),
+            rnd.Next(-10, 10),
+        };
+
         ReferenceCircle[] referenceCircles = new ReferenceCircle[]
         {
-            new ReferenceCircle(Radius, 180, 60, AngularVelocity - 1, TmPtr),
-            new ReferenceCircle(Radius, 300, 60, AngularVelocity + 4, TmPtr),
-            new ReferenceCircle(Radius, 420, 60, AngularVelocity - 6, TmPtr),
-            new ReferenceCircle(Radius, 540, 60, AngularVelocity + 1, TmPtr),
-            new ReferenceCircle(Radius, 660, 60, AngularVelocity + 2, TmPtr),
-            new ReferenceCircle(Radius, 60, 180, AngularVelocity + 10, TmPtr),
-            new ReferenceCircle(Radius, 60, 300, AngularVelocity - 5, TmPtr),
-            new ReferenceCircle(Radius, 60, 420, AngularVelocity + 2, TmPtr),
-            new ReferenceCircle(Radius, 60, 540, AngularVelocity + 2, TmPtr),
-            new ReferenceCircle(Radius, 60, 660, AngularVelocity - 1, TmPtr),
+            new ReferenceCircle(Radius, 180, 60, AngularVelocity + AngularVelocities[0], TmPtr),
+            new ReferenceCircle(Radius, 300, 60, AngularVelocity + AngularVelocities[1], TmPtr),
+            new ReferenceCircle(Radius, 420, 60, AngularVelocity + AngularVelocities[2], TmPtr),
+            new ReferenceCircle(Radius, 540, 60, AngularVelocity + AngularVelocities[3], TmPtr),
+            new ReferenceCircle(Radius, 660, 60, AngularVelocity + AngularVelocities[4], TmPtr),
+            new ReferenceCircle(Radius, 60, 180, AngularVelocity + AngularVelocities[5], TmPtr),
+            new ReferenceCircle(Radius, 60, 300, AngularVelocity + AngularVelocities[6], TmPtr),
+            new ReferenceCircle(Radius, 60, 420, AngularVelocity + AngularVelocities[7], TmPtr),
+            new ReferenceCircle(Radius, 60, 540, AngularVelocity + AngularVelocities[8], TmPtr),
+            new ReferenceCircle(Radius, 60, 660, AngularVelocity + AngularVelocities[9], TmPtr),
         };
 
         ReferenceCircle[] referenceCirclesNonRemovable = new ReferenceCircle[]
         {
-            new ReferenceCircle(Radius, 180, 60, AngularVelocity - 1, TmPtr, false),
-            new ReferenceCircle(Radius, 300, 60, AngularVelocity + 4, TmPtr, false),
-            new ReferenceCircle(Radius, 420, 60, AngularVelocity - 6, TmPtr, false),
-            new ReferenceCircle(Radius, 540, 60, AngularVelocity + 10, TmPtr, false),
-            new ReferenceCircle(Radius, 660, 60, AngularVelocity + 2, TmPtr, false),
-            new ReferenceCircle(Radius, 60, 180, AngularVelocity + 1, TmPtr, false),
-            new ReferenceCircle(Radius, 60, 300, AngularVelocity - 5, TmPtr, false),
-            new ReferenceCircle(Radius, 60, 420, AngularVelocity + 2, TmPtr, false),
-            new ReferenceCircle(Radius, 60, 540, AngularVelocity + 2, TmPtr, false),
-            new ReferenceCircle(Radius, 60, 660, AngularVelocity - 1, TmPtr, false),
+            new ReferenceCircle(Radius, 180, 60, AngularVelocity + AngularVelocities[0], TmPtr, false),
+            new ReferenceCircle(Radius, 300, 60, AngularVelocity + AngularVelocities[1], TmPtr, false),
+            new ReferenceCircle(Radius, 420, 60, AngularVelocity + AngularVelocities[2], TmPtr, false),
+            new ReferenceCircle(Radius, 540, 60, AngularVelocity + AngularVelocities[3], TmPtr, false),
+            new ReferenceCircle(Radius, 660, 60, AngularVelocity + AngularVelocities[4], TmPtr, false),
+            new ReferenceCircle(Radius, 60, 180, AngularVelocity + AngularVelocities[5], TmPtr, false),
+            new ReferenceCircle(Radius, 60, 300, AngularVelocity + AngularVelocities[6], TmPtr, false),
+            new ReferenceCircle(Radius, 60, 420, AngularVelocity + AngularVelocities[7], TmPtr, false),
+            new ReferenceCircle(Radius, 60, 540, AngularVelocity + AngularVelocities[8], TmPtr, false),
+            new ReferenceCircle(Radius, 60, 660, AngularVelocity + AngularVelocities[9], TmPtr, false),
         };
 
         int[] CurvesPointX = new int[5];
